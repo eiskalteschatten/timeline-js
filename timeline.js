@@ -16,17 +16,26 @@ function drawTimeline() {
   ctx.font = `${fontSize}px sans-serif`;
 
   let timeLineX = 0;
-  let raf;
 
+  const distanceBetweenLines = 50;
+  const linesPerScreen = Math.floor(canvas.width / distanceBetweenLines);
+  const howOftenYearsAreShown = 3;
+  const distanceBetweenYears = distanceBetweenLines * howOftenYearsAreShown;
+  const yearsPerScreen = Math.floor(canvas.width / distanceBetweenYears);
   const yearIncrement = Math.floor(Math.random() * 35);
   const minStartingYear = 700;
   const maxStartingYear = 1000;
   const startingYear = Math.floor(Math.random() * (maxStartingYear - minStartingYear + 1) + minStartingYear);
+
   const years = [startingYear];
 
   for (let year = startingYear; year < new Date().getFullYear(); year = year + yearIncrement) {
     years.push(year);
   }
+
+  let yearSliceIndex = 0;
+  let yearsToDraw = years.slice(yearSliceIndex, yearsPerScreen);
+  let yearsScrolledOff = [];
 
   function drawCenterLine() {
     ctx.beginPath();
@@ -38,11 +47,9 @@ function drawTimeline() {
   }
 
   function drawYears() {
-    const distanceBetweenLines = 50;
-    const howOftenYearsAreShown = 3;
-    let line = 1;
+    let yearIndex = 0;
 
-    for (let year of years) {
+    for (let line = 1; line < linesPerScreen; line++) {
       const hasYear = !Boolean(line % howOftenYearsAreShown);
       const height = hasYear ? (canvas.height / 2) - fontSize : canvas.height / 2;
       const x = (line * distanceBetweenLines) - timeLineX;
@@ -56,13 +63,16 @@ function drawTimeline() {
       ctx.closePath();
 
       if (hasYear) {
+        const year = yearsToDraw[yearIndex];
         ctx.setTransform(1,0,0,1, x, y);
         ctx.textAlign = 'center';
         ctx.fillStyle = foregroundColor;
         ctx.fillText(year, 0, 55);
+        yearIndex++;
+        yearsScrolledOff.push(year);
+        yearSliceIndex++;
+        yearsToDraw = years.slice(yearSliceIndex, yearSliceIndex + yearsPerScreen);
       }
-
-      line += 1;
     }
   }
 
@@ -88,10 +98,10 @@ function drawTimeline() {
     drawCenterLine();
     drawGradient();
     timeLineX += 1;
-    raf = window.requestAnimationFrame(animate);
+    window.requestAnimationFrame(animate);
   }
 
-  raf = window.requestAnimationFrame(animate);
+  window.requestAnimationFrame(animate);
 }
 
 window.onload = drawTimeline;
