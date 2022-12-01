@@ -41,10 +41,12 @@ function drawTimeline() {
   }
 
   function drawGradient() {
+    const transparentColor = isDarkMode ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0)';
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+
     gradient.addColorStop(0, backgroundColor);
-    gradient.addColorStop(.15, 'rgba(0,0,0,0)');
-    gradient.addColorStop(.85, 'rgba(0,0,0,0)');
+    gradient.addColorStop(.25, transparentColor);
+    gradient.addColorStop(.75, transparentColor);
     gradient.addColorStop(1, backgroundColor);
 
     ctx.beginPath();
