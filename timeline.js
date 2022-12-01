@@ -16,10 +16,11 @@ function drawTimeline() {
   ctx.font = `${fontSize}px sans-serif`;
 
   let timeLineX = 0;
+  let raf;
 
   const yearIncrement = Math.floor(Math.random() * 35);
-  const minStartingYear = 500;
-  const maxStartingYear = 1100;
+  const minStartingYear = 700;
+  const maxStartingYear = 1000;
   const startingYear = Math.floor(Math.random() * (maxStartingYear - minStartingYear + 1) + minStartingYear);
   const years = [startingYear];
 
@@ -87,10 +88,10 @@ function drawTimeline() {
     drawCenterLine();
     drawGradient();
     timeLineX += 1;
-    window.requestAnimationFrame(animate);
+    raf = window.requestAnimationFrame(animate);
   }
 
-  window.requestAnimationFrame(animate);
+  raf = window.requestAnimationFrame(animate);
 }
 
 window.onload = drawTimeline;
