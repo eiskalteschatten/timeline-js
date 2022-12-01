@@ -81,13 +81,16 @@ function drawTimeline() {
     ctx.closePath();
   }
 
-  setInterval(() => {
+  function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawYears();
     drawCenterLine();
     drawGradient();
-    timeLineX += 5;
-  }, 100);
+    timeLineX += 1;
+    window.requestAnimationFrame(animate);
+  }
+
+  window.requestAnimationFrame(animate);
 }
 
 window.onload = drawTimeline;
