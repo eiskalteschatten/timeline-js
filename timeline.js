@@ -6,13 +6,15 @@ function drawTimeline() {
   }
 
   const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const numberOfSpaces = 10;
+  const numberOfSpaces = 15;
 
   const ctx = canvas.getContext('2d');
   const foregroundColor = isDarkMode ? 'white' : 'black';
   const backgroundColor = isDarkMode ? 'black' : 'white';
+  const fontSize = 16;
 
   ctx.strokeStyle = foregroundColor;
+  ctx.font = `${fontSize}px sans-serif`;
 
   function drawCenterLine() {
     ctx.beginPath();
@@ -25,12 +27,16 @@ function drawTimeline() {
 
   function drawYears() {
     const distanceBetweenLines = canvas.width / numberOfSpaces;
+    const startingYear = Math.floor(Math.random() * (1100 - 800 + 1) + 800);
+    const howOftenYearsAreShown = 3;
+    const yearIncrement = Math.floor(Math.random() * 200);
+    let currentYear = startingYear;
 
-    // Draw vertical lines
     for (let line = 1; line < numberOfSpaces; line += 1) {
-      const height = canvas.height / 2;
+      const hasYear = !Boolean(line % howOftenYearsAreShown);
+      const height = hasYear ? (canvas.height / 2) - fontSize : canvas.height / 2;
       const x = line * distanceBetweenLines;
-      const y = height / 2;
+      const y = hasYear ? (height / 2) + (fontSize / 2) : height / 2;
 
       ctx.beginPath();
       ctx.setTransform(1,0,0,1, x, y);
@@ -38,6 +44,14 @@ function drawTimeline() {
       ctx.lineTo(0, height);
       ctx.stroke();
       ctx.closePath();
+
+      if (hasYear) {
+        ctx.setTransform(1,0,0,1, x, y);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = foregroundColor;
+        ctx.fillText(currentYear, 0, 55);
+        currentYear = currentYear + yearIncrement;
+      }
     }
   }
 
