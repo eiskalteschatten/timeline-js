@@ -14,7 +14,16 @@ function drawTimeline() {
 
   ctx.strokeStyle = foregroundColor;
 
-  function drawLines() {
+  function drawCenterLine() {
+    ctx.beginPath();
+    ctx.setTransform(1, 0, 0, 1, 0, canvas.height / 2);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(canvas.width, 0);
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  function drawYears() {
     const distanceBetweenLines = canvas.width / numberOfSpaces;
 
     // Draw vertical lines
@@ -30,14 +39,6 @@ function drawTimeline() {
       ctx.stroke();
       ctx.closePath();
     }
-
-    // Draw horizontal line
-    ctx.beginPath();
-    ctx.setTransform(1, 0, 0, 1, 0, canvas.height / 2);
-    ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, 0);
-    ctx.stroke();
-    ctx.closePath();
   }
 
   function drawGradient() {
@@ -56,7 +57,8 @@ function drawTimeline() {
     ctx.closePath();
   }
 
-  drawLines();
+  drawCenterLine();
+  drawYears();
   drawGradient();
 }
 
