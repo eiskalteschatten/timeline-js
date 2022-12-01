@@ -6,22 +6,19 @@ function drawTimeline() {
   }
 
   const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const numberOfSpaces = { x: 5, y: 5 };
+  const numberOfSpaces = 5;
 
   const ctx = canvas.getContext('2d');
 
   ctx.strokeStyle = isDarkMode ? 'white' : 'black';
 
   function drawLines() {
-    const distanceBetweenLines = {
-      x: canvas.width / numberOfSpaces.x,
-      y: canvas.height / numberOfSpaces.y,
-    };
+    const distanceBetweenLines = canvas.width / numberOfSpaces;
 
     // Draw vertical lines
-    for (let line = 1; line < numberOfSpaces.x; line += 1) {
+    for (let line = 1; line < numberOfSpaces; line += 1) {
       const height = canvas.height / 2;
-      const x = line * distanceBetweenLines.x;
+      const x = line * distanceBetweenLines;
       const y = height / 2;
 
       ctx.beginPath();
