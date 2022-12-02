@@ -51,7 +51,7 @@ function drawTimeline() {
     let yearIndex = 0;
 
     for (let line = 1; yearIndex < years.length; line++) {
-      const hasYear = !Boolean(line % howOftenYearsAreShown);
+      const hasYear = !(line % howOftenYearsAreShown);
       const height = hasYear ? (canvas.height / 2) - fontSize : canvas.height / 2;
       const x = (line * distanceBetweenLines) - timeLineX;
       const y = hasYear ? (height / 2) + (fontSize / 2) : height / 2;
@@ -103,7 +103,7 @@ function drawTimeline() {
   raf = window.requestAnimationFrame(animate);
 
   // Stop the animation after 5 minutes
-  setTimeout(() => cancelAnimationFrame(raf), 300000)
+  setTimeout(() => cancelAnimationFrame(raf), 300000);
 }
 
 window.onload = drawTimeline;
