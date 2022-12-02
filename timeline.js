@@ -15,22 +15,20 @@ function drawTimeline() {
   ctx.strokeStyle = foregroundColor;
   ctx.font = `${fontSize}px sans-serif`;
 
+  let raf;
   let timeLineX = 0;
-  let progressCounter = 0;
 
   const distanceBetweenLines = 50;
-  const linesPerScreen = Math.floor(canvas.width / distanceBetweenLines);
   const howOftenYearsAreShown = 3;
-  const distanceBetweenYears = distanceBetweenLines * howOftenYearsAreShown;
-  const yearsPerScreen = Math.floor(canvas.width / distanceBetweenYears);
   const yearIncrement = Math.floor(Math.random() * 35);
   const minStartingYear = -200;
   const maxStartingYear = 200;
+  const maxNumberOfYears = 300;
   const startingYear = Math.floor(Math.random() * (maxStartingYear - minStartingYear + 1) + minStartingYear);
 
   const years = [startingYear];
 
-  for (let year = startingYear + yearIncrement; years.length < yearsPerScreen; year += yearIncrement) {
+  for (let year = startingYear + yearIncrement; years.length < maxNumberOfYears; year += yearIncrement) {
     years.push(year);
   }
 
@@ -46,7 +44,7 @@ function drawTimeline() {
   function drawYears() {
     let yearIndex = 0;
 
-    for (let line = 1; line < linesPerScreen; line++) {
+    for (let line = 1; yearIndex < years.length; line++) {
       const hasYear = !Boolean(line % howOftenYearsAreShown);
       const height = hasYear ? (canvas.height / 2) - fontSize : canvas.height / 2;
       const x = (line * distanceBetweenLines) - timeLineX;
@@ -67,15 +65,10 @@ function drawTimeline() {
         ctx.fillStyle = foregroundColor;
         ctx.fillText(`${Math.abs(year)} ${label}`, 0, 55);
         yearIndex++;
-
-        if (progressCounter >= distanceBetweenYears) {
-          years.shift();
-          const lastYear = years[years.length - 1];
-          years.push(lastYear + yearIncrement);
-          progressCounter = 0;
-        }
       }
     }
+
+    cancelAnimationFrame(raf);
   }
 
   function drawGradient() {
@@ -100,11 +93,10 @@ function drawTimeline() {
     drawCenterLine();
     drawGradient();
     timeLineX += 1;
-    progressCounter += 1;
-    window.requestAnimationFrame(animate);
+    raf = window.requestAnimationFrame(animate);
   }
 
-  window.requestAnimationFrame(animate);
+  raf = window.requestAnimationFrame(animate);
 }
 
 window.onload = drawTimeline;
