@@ -27,7 +27,7 @@ function drawTimeline() {
   const yearIncrement = Math.floor(Math.random() * (maxIncrement - minIncrement + 1) + minIncrement);
 
   // Starting year
-  const minStartingYear = -200;
+  const minStartingYear = -300;
   const maxStartingYear = 200;
   const maxNumberOfYears = 300;
   const startingYear = Math.floor(Math.random() * (maxStartingYear - minStartingYear + 1) + minStartingYear);
