@@ -15,16 +15,26 @@ function drawTimeline() {
   ctx.strokeStyle = foregroundColor;
   ctx.font = `${fontSize}px sans-serif`;
 
-  let timeLineX = 0;
   let raf;
+  let timeLineX = 0;
 
-  const yearIncrement = Math.floor(Math.random() * 35);
-  const minStartingYear = 700;
-  const maxStartingYear = 1000;
+  const distanceBetweenLines = 50;
+  const howOftenYearsAreShown = 4;
+
+  // Year increment
+  const minIncrement = 25;
+  const maxIncrement = 50;
+  const yearIncrement = Math.floor(Math.random() * (maxIncrement - minIncrement + 1) + minIncrement);
+
+  // Starting year
+  const minStartingYear = -200;
+  const maxStartingYear = 200;
+  const maxNumberOfYears = 300;
   const startingYear = Math.floor(Math.random() * (maxStartingYear - minStartingYear + 1) + minStartingYear);
+
   const years = [startingYear];
 
-  for (let year = startingYear; year < new Date().getFullYear(); year = year + yearIncrement) {
+  for (let year = startingYear + yearIncrement; years.length < maxNumberOfYears; year += yearIncrement) {
     years.push(year);
   }
 
@@ -38,11 +48,9 @@ function drawTimeline() {
   }
 
   function drawYears() {
-    const distanceBetweenLines = 50;
-    const howOftenYearsAreShown = 3;
-    let line = 1;
+    let yearIndex = 0;
 
-    for (let year of years) {
+    for (let line = 1; yearIndex < years.length; line++) {
       const hasYear = !Boolean(line % howOftenYearsAreShown);
       const height = hasYear ? (canvas.height / 2) - fontSize : canvas.height / 2;
       const x = (line * distanceBetweenLines) - timeLineX;
@@ -56,13 +64,14 @@ function drawTimeline() {
       ctx.closePath();
 
       if (hasYear) {
+        const year = years[yearIndex];
+        const label = year < 0 ? 'BCE' : 'CE';
         ctx.setTransform(1,0,0,1, x, y);
         ctx.textAlign = 'center';
         ctx.fillStyle = foregroundColor;
-        ctx.fillText(year, 0, 55);
+        ctx.fillText(`${Math.abs(year)} ${label}`, 0, 55);
+        yearIndex++;
       }
-
-      line += 1;
     }
   }
 
@@ -92,6 +101,9 @@ function drawTimeline() {
   }
 
   raf = window.requestAnimationFrame(animate);
+
+  // Stop the animation after 5 minutes
+  setTimeout(() => cancelAnimationFrame(raf), 300000)
 }
 
 window.onload = drawTimeline;
