@@ -19,8 +19,14 @@ function drawTimeline() {
   let timeLineX = 0;
 
   const distanceBetweenLines = 50;
-  const howOftenYearsAreShown = 3;
-  const yearIncrement = Math.floor(Math.random() * 35);
+  const howOftenYearsAreShown = 4;
+
+  // Year increment
+  const minIncrement = 25;
+  const maxIncrement = 50;
+  const yearIncrement = Math.floor(Math.random() * (maxIncrement - minIncrement + 1) + minIncrement);
+
+  // Starting year
   const minStartingYear = -200;
   const maxStartingYear = 200;
   const maxNumberOfYears = 300;
@@ -67,8 +73,6 @@ function drawTimeline() {
         yearIndex++;
       }
     }
-
-    cancelAnimationFrame(raf);
   }
 
   function drawGradient() {
@@ -97,6 +101,9 @@ function drawTimeline() {
   }
 
   raf = window.requestAnimationFrame(animate);
+
+  // Stop the animation after 5 minutes
+  setTimeout(() => cancelAnimationFrame(raf), 300000)
 }
 
 window.onload = drawTimeline;
