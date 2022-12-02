@@ -16,6 +16,7 @@ function drawTimeline() {
   ctx.font = `${fontSize}px sans-serif`;
 
   let timeLineX = 0;
+  let progressCounter = 0;
 
   const distanceBetweenLines = 50;
   const linesPerScreen = Math.floor(canvas.width / distanceBetweenLines);
@@ -23,19 +24,15 @@ function drawTimeline() {
   const distanceBetweenYears = distanceBetweenLines * howOftenYearsAreShown;
   const yearsPerScreen = Math.floor(canvas.width / distanceBetweenYears);
   const yearIncrement = Math.floor(Math.random() * 35);
-  const minStartingYear = 700;
-  const maxStartingYear = 1000;
+  const minStartingYear = -200;
+  const maxStartingYear = 200;
   const startingYear = Math.floor(Math.random() * (maxStartingYear - minStartingYear + 1) + minStartingYear);
 
   const years = [startingYear];
 
-  for (let year = startingYear; year < new Date().getFullYear(); year = year + yearIncrement) {
+  for (let year = startingYear + yearIncrement; years.length < yearsPerScreen; year += yearIncrement) {
     years.push(year);
   }
-
-  let yearSliceIndex = 0;
-  let yearsToDraw = years.slice(yearSliceIndex, yearsPerScreen);
-  let yearsScrolledOff = [];
 
   function drawCenterLine() {
     ctx.beginPath();
@@ -63,15 +60,20 @@ function drawTimeline() {
       ctx.closePath();
 
       if (hasYear) {
-        const year = yearsToDraw[yearIndex];
+        const year = years[yearIndex];
+        const label = year < 0 ? 'BCE' : 'CE';
         ctx.setTransform(1,0,0,1, x, y);
         ctx.textAlign = 'center';
         ctx.fillStyle = foregroundColor;
-        ctx.fillText(year, 0, 55);
+        ctx.fillText(`${Math.abs(year)} ${label}`, 0, 55);
         yearIndex++;
-        yearsScrolledOff.push(year);
-        yearSliceIndex++;
-        yearsToDraw = years.slice(yearSliceIndex, yearSliceIndex + yearsPerScreen);
+
+        if (progressCounter >= distanceBetweenYears) {
+          years.shift();
+          const lastYear = years[years.length - 1];
+          years.push(lastYear + yearIncrement);
+          progressCounter = 0;
+        }
       }
     }
   }
@@ -98,6 +100,7 @@ function drawTimeline() {
     drawCenterLine();
     drawGradient();
     timeLineX += 1;
+    progressCounter += 1;
     window.requestAnimationFrame(animate);
   }
 
